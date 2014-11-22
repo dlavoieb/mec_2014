@@ -2,6 +2,8 @@
 
 int forward = 13;
 int backward = 12;
+int leftMotorPin = 6;
+int rightMotorPin = 7;
   
 void setup()
 { 
@@ -16,5 +18,6 @@ void loop()
   digitalWrite(backward, HIGH);
 
 
-  analogWrite(6, 255); 
+  analogWrite(leftMotorPin, 255);
+  analogWrite(rightMotorPin, 255);
 }
