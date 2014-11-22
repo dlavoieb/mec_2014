@@ -1,11 +1,11 @@
-#define straight1 57
+#define straight1 59
 #define straight2 26
 #define straight3 24
 #define straight4 16
 
-#define turn1 100
+#define turn1 1500
 
-#define speed 
+#define speed 3.1788
 
 int leftForwardPin = 11;
 int leftBackwardPin = 10;
@@ -44,38 +44,42 @@ void moveForward()
 
 void turnCounterClockwise()
 {
-  analogWrite(leftMotorSpeedPin, 100);
-  analogWrite(rightMotorSpeedPin, 255);
-
+digitalWrite(leftForwardPin, LOW);
+  digitalWrite(leftBackwardPin, HIGH);
+  
+  digitalWrite(rightForwardPin, HIGH);
+  digitalWrite(rightBackwardPin, LOW);
 }
 
 void turnClockwise()
 {
-  analogWrite(leftMotorSpeedPin, 255);
-    analogWrite(rightMotorSpeedPin, 100);
-
+digitalWrite(leftForwardPin, HIGH);
+  digitalWrite(leftBackwardPin, LOW);
+  
+  digitalWrite(rightForwardPin, LOW);
+  digitalWrite(rightBackwardPin, HIGH);
 }
 
 void loop()
 {
   setMAXSpeed();
   moveForward();
-  int delay1 = straight1/speed;
+  float delay1 = straight1/speed * 1000;
   delay(delay1);
   turnCounterClockwise();
   delay(turn1);
   moveForward();
-  int delay2 = straight2/speed;
+  int delay2 = straight2/speed * 1000;
   delay(delay2);
   turnCounterClockwise();
   delay(turn1);
   moveForward();
-  int delay3 = straight3/speed;
+  int delay3 = straight3/speed * 1000;
   delay(delay3);
   turnCounterClockwise();
   delay(turn1);
   moveForward();
-  int delay4 = straight4/speed;
+  int delay4 = straight4/speed * 1000;
   delay(delay4);
   turnClockwise();
   delay(turn1);
