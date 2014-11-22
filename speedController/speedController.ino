@@ -25,13 +25,21 @@ void setup()
 
 void loop()
 {
-  digitalWrite(leftForwardPin, LOW);
-  digitalWrite(leftBackwardPin, HIGH);
+  digitalWrite(leftForwardPin, HIGH);
+  digitalWrite(leftBackwardPin, LOW);
   
-  digitalWrite(rightForwardPin, LOW);
-  digitalWrite(rightBackwardPin, HIGH);
+  digitalWrite(rightForwardPin, HIGH);
+  digitalWrite(rightBackwardPin, LOW);
 
 
   analogWrite(leftMotorSpeedPin, 255);
   analogWrite(rightMotorSpeedPin, 255);
+  delay(5000);
+  //turn right
+  digitalWrite(leftForwardPin, HIGH);
+  digitalWrite(leftBackwardPin, LOW);
+  
+  digitalWrite(rightForwardPin, LOW);
+  digitalWrite(rightBackwardPin, HIGH);
+  delay(5000);
 }
