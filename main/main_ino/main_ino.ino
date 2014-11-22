@@ -1,19 +1,25 @@
 #include <LinkedList.h>
+#include <stdlib.h>
 
 #define FILTER_WINDOW 50
-#define DIFF_THREASHOLD 100
+#define LIGHT_THRESHOLD 1.80
 
-int leftMotorPIN = 9;
-int rightMotorPIN = 10;
+int leftForwardPin = 13;
+int leftBackwardPin = 12;
+int rightForwardPin = 4;
+int rightBackwardPin = 2;
+int leftMotorSpeedPin = 6;
+int rightMotorSpeedPin = 5;
 
-int sensor1 = A0;
-int sensor2 = A1;
 
-int prev1;
-int prev2;
+int sensor1 = A0; //inside
+int sensor2 = A1; //outside
+
 int value1;
 int value2;
 
+char tmp1[10];
+char tmp2[10];
 LinkedList<int> listS1 = LinkedList<int>();
 LinkedList<int> listS2 = LinkedList<int>();
 
@@ -26,6 +32,44 @@ void setup()
 	    listS1.add(analogRead(sensor1));
 	    listS2.add(analogRead(sensor2));
 	}
+
+	moveForward();
+	setMAXSpeed();
+}
+
+void setMAXSpeed() {
+	analogWrite(leftMotorSpeedPin, 255);
+  	analogWrite(rightMotorSpeedPin, 255);
+}
+
+void turnClockwise()
+{
+  digitalWrite(leftForwardPin, HIGH);
+  digitalWrite(leftBackwardPin, LOW);
+  
+  digitalWrite(rightForwardPin, LOW);
+  digitalWrite(rightBackwardPin, HIGH);
+
+}
+
+void turnCounterClockwise()
+{
+  digitalWrite(leftForwardPin, LOW);
+  digitalWrite(leftBackwardPin, HIGH);
+  
+  digitalWrite(rightForwardPin, HIGH);
+  digitalWrite(rightBackwardPin, LOW);
+
+}
+
+void moveForward()
+{
+  digitalWrite(leftForwardPin, HIGH);
+  digitalWrite(leftBackwardPin, LOW);
+  
+  digitalWrite(rightForwardPin, HIGH);
+  digitalWrite(rightBackwardPin, LOW);
+
 }
 
 void loop()
@@ -52,26 +96,23 @@ void loop()
 	}
 	float avg2 = sum2/float(listS2.size());
 
-  	Serial.println(avg1);
+  	String stringOne = "Sensor value: ";
+  	dtostrf(avg1,1,2,tmp1);
+  	dtostrf(avg2,1,2,tmp2);
+
+  	String stringThree = stringOne + tmp1 + "\t" + tmp2;
+  	
+  	Serial.println(stringThree);
   
-	int diff1 = prev1 - avg1;
-	int diff2 = prev2 - avg2;
-/*
-black line always on the left
-
-sensor 1 should be on line
-sensor 2 should be on white
-
-less light, less current, less voltage, negative differential
-
-*/
-	if (diff1 < DIFF_THREASHOLD){ //check orientation of logic 
-		//moved from white to black
-
-	}
-	else {
-		//moved from black to white
-	}
+  	if (avg1 > LIGHT_THRESHOLD){
+  		//inside sensor is over line
+  		turnClockwise();
+  	} else if (avg2 < LIGHT_THRESHOLD){
+  		//outside sensor is not over line
+  		turnCounterClockwise();
+  	} else {
+  		moveForward();
+  	}
 	delay(1);
 
 }
