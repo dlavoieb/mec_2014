@@ -1,7 +1,7 @@
 
 //Pin declarations
-int leftForwardPin = 13;
-int leftBackwardPin = 12;
+int leftForwardPin = 11;
+int leftBackwardPin = 10;
 int rightForwardPin = 4;
 int rightBackwardPin = 2;
 int leftMotorSpeedPin = 6;
@@ -34,12 +34,12 @@ void loop()
 
   analogWrite(leftMotorSpeedPin, 255);
   analogWrite(rightMotorSpeedPin, 255);
-  delay(5000);
+ /* delay(5000);
   //turn right
   digitalWrite(leftForwardPin, HIGH);
   digitalWrite(leftBackwardPin, LOW);
   
   digitalWrite(rightForwardPin, LOW);
   digitalWrite(rightBackwardPin, HIGH);
-  delay(5000);
+  delay(5000);*/
 }
