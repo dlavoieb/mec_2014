@@ -1,8 +1,8 @@
 #include <LinkedList.h>
 #include <stdlib.h>
 
-#define FILTER_WINDOW 50
-#define LIGHT_THRESHOLD 4
+#define FILTER_WINDOW 25
+#define LIGHT_THRESHOLD 25
 
 int leftForwardPin = 11;
 int leftBackwardPin = 10;
@@ -20,12 +20,22 @@ int value2;
 
 char tmp1[10];
 char tmp2[10];
+char tmp3[10];
 
 LinkedList<int> listS1 = LinkedList<int>();
 LinkedList<int> listS2 = LinkedList<int>();
 
 void setup()
 {
+  pinMode(leftForwardPin, OUTPUT);
+  pinMode(leftBackwardPin, OUTPUT);
+  
+  pinMode(rightForwardPin, OUTPUT);
+  pinMode(rightBackwardPin, OUTPUT);
+  
+  pinMode(leftMotorSpeedPin, OUTPUT);
+  pinMode(rightMotorSpeedPin, OUTPUT);
+  
 	Serial.begin(9600);
 	Serial.println("Goodnight moon!");
 
@@ -45,21 +55,15 @@ void setMAXSpeed() {
 
 void turnClockwise()
 {
-  digitalWrite(leftForwardPin, HIGH);
-  digitalWrite(leftBackwardPin, LOW);
-  
-  digitalWrite(rightForwardPin, LOW);
-  digitalWrite(rightBackwardPin, HIGH);
+  analogWrite(leftMotorSpeedPin, 255);
+  	analogWrite(rightMotorSpeedPin, 100);
 
 }
 
 void turnCounterClockwise()
 {
-  digitalWrite(leftForwardPin, LOW);
-  digitalWrite(leftBackwardPin, HIGH);
-  
-  digitalWrite(rightForwardPin, HIGH);
-  digitalWrite(rightBackwardPin, LOW);
+  analogWrite(leftMotorSpeedPin, 100);
+  analogWrite(rightMotorSpeedPin, 255);
 
 }
 
@@ -97,15 +101,17 @@ void loop()
 	}
 	float avg2 = sum2/float(listS2.size()) - 19;
 
+	float realAvg = (avg2 + avg1)/2.0;
+
   	String stringOne = "Sensor value: ";
   	dtostrf(avg1,1,2,tmp1);
   	dtostrf(avg2,1,2,tmp2);
+	dtostrf(avg2,1,2,tmp3);
 
-  	String stringThree = stringOne + tmp1 + "\t" + tmp2;
+  	String stringThree = stringOne + tmp1 + "\t" + tmp2 + "\tFull average:"+tmp2;
   	
   	Serial.println(stringThree);
 
-	float realAvg = (avg2 + avg1)/2.0;
 
    	if (realAvg > LIGHT_THRESHOLD){
   		//black
