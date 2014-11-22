@@ -1,6 +1,6 @@
 #include <LinkedList.h>
 
-#define FILTER_WINDOW 10
+#define FILTER_WINDOW 50
 #define DIFF_THREASHOLD 100
 
 int leftMotorPIN = 9;
@@ -19,6 +19,9 @@ LinkedList<int> listS2 = LinkedList<int>();
 
 void setup()
 {
+	Serial.begin(9600);
+	Serial.println("Goodnight moon!");
+
 	for(int i=0; i<FILTER_WINDOW; i++){
 	    listS1.add(analogRead(sensor1));
 	    listS2.add(analogRead(sensor2));
@@ -27,10 +30,16 @@ void setup()
 
 void loop()
 {
-	listS1.add(analogRead(sensor1));
-	listS1.remove(0);
-	listS2.add(analogRead(sensor2));
-	listS2.remove(0);
+	int value1 = analogRead(sensor1);
+	if (value1 != 0){
+		listS1.add(value1);
+		listS1.remove(0);
+	}
+	int value2 = analogRead(sensor2);
+	if (value2 != 0){
+		listS2.add(value2);
+		listS2.remove(0);
+	}
 
 	float sum1 = 0;
 	float sum2 = 0;
@@ -43,16 +52,26 @@ void loop()
 	}
 	float avg2 = sum2/float(listS2.size());
 
+  	Serial.println(avg1);
+  
 	int diff1 = prev1 - avg1;
 	int diff2 = prev2 - avg2;
+/*
+black line always on the left
 
+sensor 1 should be on line
+sensor 2 should be on white
+
+less light, less current, less voltage, negative differential
+
+*/
 	if (diff1 < DIFF_THREASHOLD){ //check orientation of logic 
-	//less light, less current, less voltage, negative differential
 		//moved from white to black
 
 	}
 	else {
 		//moved from black to white
 	}
+	delay(1);
 
 }
